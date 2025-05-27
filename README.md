@@ -110,9 +110,11 @@ python -m venv venv
   ```
 
 3. **Install the required dependencies:**
+```
 pip install gradio PyPDF2 python-docx fpdf requests
+```
 
-4. **Set your Hugging Face API key:**
+5. **Set your Hugging Face API key:**
 
 The job description summarization feature uses the Hugging Face BART model API.  
 Before running the app, you need to set your Hugging Face API key as an environment variable:
