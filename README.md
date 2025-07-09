@@ -1,14 +1,16 @@
-# 🧠 JobFit Analyzer
+# 🚀 CareerAlign AI — Outsmart the Bots. Align with Your Dream Job.
 
 **The Smartest Way to Match Your Resume to Your Dream Job!**
 
 ---
 
+![image](https://github.com/user-attachments/assets/c4c8335d-3c52-45aa-8e08-f48f53e37aa0)
+![image](https://github.com/user-attachments/assets/7e0c3be6-03ae-4cbe-a260-a8a1d5a8bac9)
+![image](https://github.com/user-attachments/assets/afef8f97-0d06-4f54-a8e1-914a66d0a42f)
 
-![image](https://github.com/user-attachments/assets/dcacc699-dee9-4938-b382-ef54f2df347f)
-![image](https://github.com/user-attachments/assets/5f81b93b-7d7f-46b8-b3fe-5663a6cdb98b)
-![image](https://github.com/user-attachments/assets/c199024d-7b0b-43d2-9684-4e34b067dc36)
-![image](https://github.com/user-attachments/assets/10b21c19-41d5-4880-a43e-0a2502cc6d7f)
+
+
+
 
 
 
@@ -17,9 +19,9 @@
 
 ## 🚀 Overview
 
-**JobFit Analyzer** is an AI-powered web app that helps you instantly see how well your resume fits a job description—plus, it shows skill gaps, recommends learning resources, suggests career paths, and even writes a tailored cover letter for you!
+**CareerAlign AI** is an AI-powered web app that helps you instantly see how well your resume fits a job description—plus, it shows skill gaps, recommends learning resources, suggests career paths, and even writes a tailored cover letter for you!
 
-No more guessing if your resume is a match. Upload your resume, paste the job description, and let JobFit Analyzer do the heavy lifting.
+No more guessing if your resume is a match. Upload your resume, paste the job description, and let CareerAlign AI do the heavy lifting.
 
 ---
 
@@ -163,7 +165,7 @@ After running, Gradio will provide a local URL—click or copy it into your brow
 
 ---
 
-## 💡 Why Use JobFit Analyzer?
+## 💡 Why Use CareerAlign AI?
 
 - **Save Time:** Instantly know your fit for any job.
 - **Get Actionable Feedback:** See exactly what you’re missing—and how to improve.
