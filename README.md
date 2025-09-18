@@ -1,165 +1,117 @@
-# 🚀 CareerAlign AI — Outsmart the Bots. Align with Your Dream Job.
+# 🚀 CareerAlign AI — Submission for AI Demos × AI for Content Creators Hackathon 2025
 
-**The Smartest Way to Match Your Resume to Your Dream Job!**
+**Empowering Creators and Professionals to Build Smarter Career Content with AI**
+
+
 ---
 
 ## 🚀 Overview
 
-**CareerAlign AI** is an AI-powered web app that helps you instantly see how well your resume fits a job description—plus, it shows skill gaps, recommends learning resources, suggests career paths, and even writes a tailored cover letter for you!
-
-No more guessing if your resume is a match. Upload your resume, paste the job description, and let CareerAlign AI do the heavy lifting.
+CareerAlign AI is designed for the creator economy: freelancers, content creators, students, and professionals seeking opportunities in today's AI-driven world. This hackathon submission uses advanced AI (Gradio, Hugging Face, OpenAI) to help users instantly match their resume to job descriptions, uncover skill gaps, access upskilling resources, and generate personalized cover letters—all with the ease and creativity that the AI Demos hackathon celebrates.
 
 ---
 
-## ✨ Features
+## ✨ Hackathon-Focused Features
 
 - **Resume & Job Description Analyzer:**  
-  Upload your resume (PDF/DOCX) and paste any job description to get a detailed analysis.
+  Upload your resume (PDF/DOCX) and a job posting to get a detailed AI-powered analysis.
 
-- **Match Score:**  
-  Instantly see how closely your resume matches the job requirements, calculated as a percentage.
+- **Match Score Calculator:**  
+  Instantly see how well your resume fits the chosen role (percentage match).
 
-- **Skill Mapping:**  
-  - *Your Skills*: Skills detected in your resume.
-  - *Matching Skills*: Skills that overlap with the job description.
-  - *Missing Skills*: Skills required by the job but missing from your resume.
+- **Skill Mapping for Creators:**  
+  - Detect your current skills from resume  
+  - Spot skills needed for the role  
+  - View missing skills and resource suggestions to upskill
 
-- **Learning Resources:**  
-  Get curated links to learn any missing skills.
+- **Smart Learning Resource Finder:**  
+  AI-curated links to YouTube, docs, and online courses for every missing skill.
 
-- **Career Suggestions:**  
-  Discover potential job roles based on your skillset.
+- **Career Path Suggestions:**  
+  Discover alternative creative/professional roles aligned with your existing strengths.
 
-- **Job Description Summarizer:**  
-  Summarize long job descriptions with one click using advanced AI.
+- **Job Description Summarization:**  
+  Advanced AI summarizes lengthy job posts for quick review—no more reading walls of text.
 
-- **PDF Report:**  
-  Download a professional report summarizing your match analysis.
+- **Professional PDF Report:**  
+  Download a neat summary of your match analysis and recommendations.
 
 - **Cover Letter Generator:**  
-  Instantly create a personalized cover letter tailored to the job and company.
-
-- **Modern UI:**  
-  Clean, collapsible sections for easy navigation, powered by Gradio.
+  Instantly generate a personalized cover letter for any company and role.
 
 ---
 
-## 🛠️ How It Works
+## 🛠️ How to Use
 
-1. **Upload Your Resume:**  
-   Drop a PDF or DOCX file in the Resume Input section.
-
-2. **Paste Job Description:**  
-   Copy-paste the job description into the provided box.
-
-3. **Analyze:**  
-   Click "Analyze Resume" to see your match score, skill breakdown, and get a downloadable PDF report.
-
-4. **Detailed Analysis:**  
-   Expand the "View Detailed Analysis" section to see:
-   - All detected skills
-   - Matching and missing skills
-   - Learning resources for each missing skill
-   - Career suggestions based on your strengths
-
-5. **Cover Letter:**  
-   Enter the job title and company, then click "Generate Cover Letter" to get a ready-to-use cover letter.
-
-6. **Summarize Job Description (Optional):**  
-   Use the "Summarize Description" button to get a concise summary of lengthy job postings.
+1. Upload your resume (PDF/DOCX)
+2. Paste the job description
+3. Click "Analyze Resume"  
+   - View match score, skill analysis, and PDF summary  
+   - Expand "Detailed Analysis" for upskilling links and career suggestions
+4. Generate your custom cover letter
+5. Summarize long job descriptions at the click of a button
 
 ---
 
-## 🧩 Under the Hood
+## 🏗️ Technology Stack
 
-- **Python & Gradio** for the interactive web interface
-- **PyPDF2** and **python-docx** for resume parsing
-- **FPDF** for PDF report generation
-- **Hugging Face BART** for job description summarization
-- **Custom Skill Database** for skill extraction and mapping
-- **Role Suggestions** based on detected skills
-- **Learning Resources** mapped to each technical skill
+- Python (Gradio, PyPDF2, python-docx, fpdf, requests)
+- Hugging Face BART (Job summarization)
+- OpenAI, spaCy (Skill extraction, AI features)
+- Custom career suggestion logic
 
 ---
 
-## 📦 Installation & Usage
+## 📦 Installation
 
-1. **Create a virtual environment (recommended):**
-python -m venv venv
+   python -m venv venv
 
-2. **Activate the virtual environment:**
-- On Windows:
-  ```
-  venv\Scripts\activate
-  ```
-- On macOS/Linux:
-  ```
-  source venv/bin/activate
-  ```
+Activate venv (Windows)
+venv\Scripts\activate
 
-3. **Install the required dependencies:**
-```
+Or, macOS/Linux:
+source venv/bin/activate
+
 pip install gradio PyPDF2 python-docx fpdf requests
-```
 
-5. **Set your Hugging Face API key:**
 
-The job description summarization feature uses the Hugging Face BART model API.  
-Before running the app, you need to set your Hugging Face API key as an environment variable:
+Set your Hugging Face API key:  
+- Windows: `set HF_API_KEY=your_huggingface_api_key`
+- macOS/Linux: `export HF_API_KEY=your_huggingface_api_key`
 
-- On Windows:
-  ```
-  set HF_API_KEY=your_huggingface_api_key
-  ```
-- On macOS/Linux:
-  ```
-  export HF_API_KEY=your_huggingface_api_key
-  ```
-
-Replace `-copy your hugging face key here-` with your actual Hugging Face API key.  
-*(You can get a free API key by signing up at huggingface.co)*
-
-**In your code:**  
-Make sure the line in your code that sets the headers uses your environment variable:
-import os
-headers = {"Authorization": "Bearer -copy your hugging face key here-"}
-
-text
-
-5. **Run the app:**
+Run:  
 python your_script_name.py
 
-text
-*(Replace `your_script_name.py` with the name of your Python file.)*
 
-6. **Open the app in your browser:**  
-After running, Gradio will provide a local URL—click or copy it into your browser to use JobFit Analyzer.
+Open your browser at the Gradio link.
 
 ---
 
 ## 📄 Example Output
 
 - **Match Score:** 78%
-- **Matching Skills:** Python, SQL, Machine Learning
-- **Missing Skills:** AWS, Docker
-- **Learning Resources:**  
-- AWS: [AWS Training](https://aws.amazon.com/training/)
-- Docker: [Docker Getting Started](https://docs.docker.com/get-started/)
+- **Skills Detected:** Python, SQL, ML
+- **Missing Skills:** AWS, Docker (with resource links)
 - **Career Suggestions:** Data Analyst, Backend Developer
-- **Cover Letter:**  
-*(Auto-generated, ready to copy or download)*
+- **Cover Letter:** *(Auto-generated for the role)*
 
 ---
 
-## 💡 Why Use CareerAlign AI?
-
-- **Save Time:** Instantly know your fit for any job.
-- **Get Actionable Feedback:** See exactly what you’re missing—and how to improve.
-- **Boost Your Applications:** Use tailored cover letters and skill insights to stand out.
-- **Plan Your Learning:** Direct links to upskill where it matters most.
+- Brings AI directly to the world of content creators and job seekers.
+- Transforms traditional career content—resumes, cover letters—into creative, intelligent outputs.
+- Makes upskilling, career discovery, and job applications engaging and efficient for everyone in the creator economy.
 
 ---
 
 ## 🤝 Contributing
 
-Pull requests are welcome! If you have ideas for new features, bug fixes, or UI improvements, open an issue or submit a PR.
+Open for pull requests and feature suggestions—let’s expand the creative impact of CareerAlign AI!
+
+---
+
+**Demo Video:**  
+https://drive.google.com/file/d/1gXlVoPsiF_CX3YcxN4b3yytxtn-gmcGN/view?usp=sharing
+
+---
+
+
