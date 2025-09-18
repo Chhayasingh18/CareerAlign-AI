@@ -1,20 +1,6 @@
 # 🚀 CareerAlign AI — Outsmart the Bots. Align with Your Dream Job.
 
 **The Smartest Way to Match Your Resume to Your Dream Job!**
-
----
-
-![image](https://github.com/user-attachments/assets/c4c8335d-3c52-45aa-8e08-f48f53e37aa0)
-![image](https://github.com/user-attachments/assets/7e0c3be6-03ae-4cbe-a260-a8a1d5a8bac9)
-![image](https://github.com/user-attachments/assets/afef8f97-0d06-4f54-a8e1-914a66d0a42f)
-
-
-
-
-
-
-
-
 ---
 
 ## 🚀 Overview
