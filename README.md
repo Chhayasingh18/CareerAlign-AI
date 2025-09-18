@@ -7,7 +7,7 @@
 
 ## 🚀 Overview
 
-CareerAlign AI is designed for the creator economy: freelancers, content creators, students, and professionals seeking opportunities in today's AI-driven world. This hackathon submission uses advanced AI (Gradio, Hugging Face, OpenAI) to help users instantly match their resume to job descriptions, uncover skill gaps, access upskilling resources, and generate personalized cover letters—all with the ease and creativity that the AI Demos hackathon celebrates.
+CareerAlign AI is designed for the creator economy: freelancers, content creators, students, and professionals seeking opportunities in today's AI-driven world. This uses advanced AI (Gradio, Hugging Face, OpenAI) to help users instantly match their resume to job descriptions, uncover skill gaps, access upskilling resources, and generate personalized cover letters—all with the ease and creativity.
 
 ---
 
