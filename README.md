@@ -1,4 +1,4 @@
-# 🚀 CareerAlign AI — Submission for AI Demos × AI for Content Creators Hackathon 2025
+# 🚀 CareerAlign AI 
 
 **Empowering Creators and Professionals to Build Smarter Career Content with AI**
 
@@ -11,7 +11,7 @@ CareerAlign AI is designed for the creator economy: freelancers, content creator
 
 ---
 
-## ✨ Hackathon-Focused Features
+## ✨ Features
 
 - **Resume & Job Description Analyzer:**  
   Upload your resume (PDF/DOCX) and a job posting to get a detailed AI-powered analysis.
@@ -89,13 +89,34 @@ Open your browser at the Gradio link.
 
 ## 📄 Example Output
 
-- **Match Score:** 78%
-- **Skills Detected:** Python, SQL, ML
-- **Missing Skills:** AWS, Docker (with resource links)
-- **Career Suggestions:** Data Analyst, Backend Developer
-- **Cover Letter:** *(Auto-generated for the role)*
+- **Resume-Role Match Score:** 82%
+  > Indicates how well your resume aligns with the targeted creative or tech job.
+
+- **Matching Skills:** Python, Prompt Engineering, Video Editing, Canva  
+  > Skills found in both the resume and job description, making the candidate a strong fit for content-centric roles.
+
+- **Missing Skills:** Social Media Management, Newsletter Automation  
+  > Skills required for the position but not present—along with curated learning resources for each.
+
+- **Recommended Learning Resources:**  
+  - Social Media Management: [HubSpot Social Media Management Guide](https://www.hubspot.com/social-media-management)  
+  - Newsletter Automation: [MailerLite Newsletter Automation Guide](https://www.mailerlite.com/blog/newsletter-automation-guide)
+
+- **Career Suggestions:**  
+  - Content Creator  
+  - Video Producer  
+  - Social Media Analyst  
+  > Suggested based on the user’s detected skillset and creative strengths.
+
+- **AI-Generated Cover Letter:**  
+  *(A custom cover letter matching the candidate’s resume to the position, written in seconds and ready to copy or download.)*
+
+- **Job Description Summary:**  
+  > An instant, concise overview of a lengthy creative role, making it easier for creators to identify core requirements and opportunities.
 
 ---
+
+CareerAlign AI’s output helps you create and optimize job application content with actionable, AI-driven insights—ideal for creators, marketers, and professionals in today’s digital workspace.
 
 - Brings AI directly to the world of content creators and job seekers.
 - Transforms traditional career content—resumes, cover letters—into creative, intelligent outputs.
