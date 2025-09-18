@@ -7,14 +7,43 @@ from collections import Counter
 import re
 
 SKILLS_DB = [
+    # Core Programming & AI Skills
     "Python", "Java", "C++", "JavaScript", "SQL", "R", "MATLAB",
-    "Machine Learning", "Data Analysis", "Pandas", "NumPy", "TensorFlow", "PyTorch",
-    "AWS", "Azure", "Google Cloud", "Docker", "Kubernetes",
-    "HTML", "CSS", "React", "Django", "Flask",
-    "Git", "GitHub", "JIRA", "Excel", "PowerPoint"
+    "Machine Learning", "Deep Learning", "Data Analysis", "Pandas", "NumPy",
+    "TensorFlow", "PyTorch", "scikit-learn", "Statistics", "Data Visualization",
+    # Cloud & DevOps
+    "AWS", "Azure", "Google Cloud", "Docker", "Kubernetes", "API Development",
+    # Web/App Development
+    "HTML", "CSS", "Sass", "React", "Angular", "Vue", "Next.js", "Django", "Flask",
+    "Firebase", "WordPress",
+    # Collaboration & Workflow
+    "Git", "GitHub", "JIRA", "Slack", "Trello", "Notion", "Asana",
+    # Productivity & Office
+    "Excel", "Google Sheets", "PowerPoint", "Microsoft Word",
+    # Content Creation Tools
+    "Canva", "Figma", "Photoshop", "Illustrator", "Premiere Pro", "Final Cut Pro",
+    "DaVinci Resolve", "Audacity", "OBS Studio", "Screen Recording", "Video Editing",
+    "Image Editing", "Audio Editing", "Animation", "Motion Graphics",
+    # AI & Generative Media
+    "Prompt Engineering", "Natural Language Processing", "ChatGPT", "Llama",
+    "Generative AI", "LangChain", "Stable Diffusion", "Midjourney", "D-ID",
+    "Speech-to-Text", "Text-to-Speech", "Face Animation", "Voice Cloning", "OpenCV",
+    "Text Summarization", "Topic Modeling", "Automated Captioning",
+    # Content, Marketing, Publishing
+    "Content Automation", "Content Repurposing", "Newsletter Automation",
+    "Blog Writing", "SEO", "Digital Marketing", "Branding", "Copywriting",
+    "Social Media Management", "YouTube Studio", "Podcast Editing", "Online Courses",
+    "Analytics", "Google Analytics", "Monetization", "Affiliate Marketing",
+    "Email Marketing", "E-commerce Platforms",
+    # Other creative skills
+    "Storytelling", "Scriptwriting", "Photo Retouching", "Video Thumbnails",
+    "Livestreaming", "Online Collaboration", "Campaign Optimization"
 ]
 
+
+
 RESOURCES = {
+    # Core Programming & AI
     "Python": "https://www.learnpython.org/",
     "Java": "https://www.learnjavaonline.org/",
     "C++": "https://www.learncpp.com/",
@@ -23,27 +52,105 @@ RESOURCES = {
     "R": "https://cran.r-project.org/manuals.html",
     "MATLAB": "https://matlabacademy.mathworks.com/",
     "Machine Learning": "https://www.coursera.org/learn/machine-learning",
+    "Deep Learning": "https://www.deeplearning.ai/short-courses/",
     "Data Analysis": "https://www.datacamp.com/courses/data-analysis-in-python",
+    "Statistics": "https://www.khanacademy.org/math/statistics-probability",
+    "Data Visualization": "https://www.tableau.com/learn/training",
     "Pandas": "https://pandas.pydata.org/docs/getting_started/index.html",
     "NumPy": "https://numpy.org/devdocs/user/quickstart.html",
     "TensorFlow": "https://www.tensorflow.org/tutorials",
     "PyTorch": "https://pytorch.org/tutorials/",
+    "scikit-learn": "https://scikit-learn.org/stable/tutorial/index.html",
+    # Cloud & DevOps
     "AWS": "https://aws.amazon.com/training/",
     "Azure": "https://learn.microsoft.com/en-us/training/azure/",
     "Google Cloud": "https://cloud.google.com/training",
     "Docker": "https://docs.docker.com/get-started/",
     "Kubernetes": "https://kubernetes.io/docs/tutorials/",
+    "API Development": "https://www.postman.com/resources/courses/",
+    # Web/App
     "HTML": "https://developer.mozilla.org/en-US/docs/Web/HTML",
     "CSS": "https://developer.mozilla.org/en-US/docs/Web/CSS",
+    "Sass": "https://sass-lang.com/guide",
     "React": "https://reactjs.org/tutorial/tutorial.html",
+    "Angular": "https://angular.io/start",
+    "Vue": "https://vuejs.org/guide/quick-start.html",
+    "Next.js": "https://nextjs.org/learn/basics/create-nextjs-app",
     "Django": "https://docs.djangoproject.com/en/stable/intro/tutorial01/",
     "Flask": "https://flask.palletsprojects.com/en/2.0.x/tutorial/",
+    "Firebase": "https://firebase.google.com/docs",
+    "WordPress": "https://learn.wordpress.org/",
+    # Collaboration
     "Git": "https://git-scm.com/doc",
     "GitHub": "https://docs.github.com/en/get-started",
     "JIRA": "https://www.atlassian.com/software/jira/guides",
+    "Slack": "https://slack.com/resources",
+    "Trello": "https://trello.com/guide",
+    "Notion": "https://www.notion.so/help/guides/notion-basics",
+    "Asana": "https://academy.asana.com/",
+    # Productivity & Office
     "Excel": "https://support.microsoft.com/en-us/excel",
-    "PowerPoint": "https://support.microsoft.com/en-us/powerpoint"
+    "Google Sheets": "https://support.google.com/docs/answer/14078417",
+    "PowerPoint": "https://support.microsoft.com/en-us/powerpoint",
+    "Microsoft Word": "https://support.microsoft.com/en-us/word",
+    # Content Creation Tools
+    "Canva": "https://www.canva.com/learn/getting-started-with-canva/",
+    "Figma": "https://www.figma.com/resources/learn-design/",
+    "Photoshop": "https://helpx.adobe.com/photoshop/tutorials.html",
+    "Illustrator": "https://helpx.adobe.com/illustrator/tutorials.html",
+    "Premiere Pro": "https://helpx.adobe.com/premiere-pro/tutorials.html",
+    "Final Cut Pro": "https://support.apple.com/final-cut-pro",
+    "DaVinci Resolve": "https://www.blackmagicdesign.com/products/davinciresolve/training",
+    "OBS Studio": "https://obsproject.com/wiki/",
+    "Audacity": "https://www.audacityteam.org/help/documentation/",
+    # AI & Generative
+    "Prompt Engineering": "https://www.deeplearning.ai/short-courses/chatgpt-prompt-engineering-for-developers/",
+    "Natural Language Processing": "https://www.coursera.org/specializations/natural-language-processing",
+    "ChatGPT": "https://platform.openai.com/docs/guides/gpt",
+    "Llama": "https://llama.meta.com/get-started/",
+    "Generative AI": "https://developers.google.com/machine-learning/genai",
+    "LangChain": "https://langchain.com/docs/",
+    "Stable Diffusion": "https://docs.stablediffusionweb.com/",
+    "Midjourney": "https://docs.midjourney.com/",
+    "D-ID": "https://docs.d-id.com/docs",
+    "Speech-to-Text": "https://cloud.google.com/speech-to-text/docs",
+    "Text-to-Speech": "https://cloud.google.com/text-to-speech/docs",
+    "Face Animation": "https://d-id.com/resources/",
+    "Voice Cloning": "https://www.descript.com/overdub",
+    "OpenCV": "https://opencv.org/courses/",
+    "Text Summarization": "https://huggingface.co/tasks/summarization",
+    "Topic Modeling": "https://towardsdatascience.com/topic-modeling-with-python-5eedb6e2a55",
+    "Automated Captioning": "https://www.rev.com/blog/automated-captioning",
+    # Content, Marketing, Publishing
+    "Content Automation": "https://zapier.com/blog/automate-content-creation/",
+    "Content Repurposing": "https://www.contenthacker.com/content-repurposing/",
+    "Newsletter Automation": "https://www.mailerlite.com/blog/newsletter-automation-guide",
+    "Blog Writing": "https://www.wix.com/blog/post/how-to-write-a-blog-post",
+    "SEO": "https://moz.com/beginners-guide-to-seo",
+    "Digital Marketing": "https://www.coursera.org/specializations/digital-marketing",
+    "Branding": "https://www.coursera.org/learn/branding-the-creative/",
+    "Copywriting": "https://www.copyblogger.com/copywriting-101/",
+    "Social Media Management": "https://www.hubspot.com/social-media-management",
+    "YouTube Studio": "https://support.google.com/youtube/answer/9314474",
+    "Podcast Editing": "https://www.buzzsprout.com/blog/podcast-editing-software-tools",
+    "Online Courses": "https://www.udemy.com/courses/teacher/",
+    "Analytics": "https://support.google.com/analytics/answer/1008015",
+    "Google Analytics": "https://analytics.google.com/analytics/academy/",
+    "Monetization": "https://www.youtube.com/creators/monetize",
+    "Affiliate Marketing": "https://www.hubspot.com/affiliate-marketing",
+    "Email Marketing": "https://mailchimp.com/email-marketing/",
+    "E-commerce Platforms": "https://www.shopify.com/learn",
+    # Creative
+    "Storytelling": "https://openai.com/research/storytelling",
+    "Scriptwriting": "https://www.scriptreaderpro.com/complete-guide-to-scriptwriting/",
+    "Photo Retouching": "https://www.adobe.com/creativecloud/photography/discover/photo-retouching.html",
+    "Video Thumbnails": "https://www.youtube.com/official/blog/en-GB/products/yt-creator/video-thumbnails/",
+    "Livestreaming": "https://creators.youtube.com/learn/live-streaming/",
+    "Online Collaboration": "https://www.notion.so/help/guides/collaborate",
+    "Campaign Optimization": "https://support.google.com/google-ads/answer/6167122"
 }
+
+
 
 def extract_text(file):
     text = ""
@@ -191,3 +298,4 @@ def format_keywords(keywords):
     if not keywords:
         return "<p>No keywords extracted.</p>"
     return "<div class='keywords'>" + " ".join(f"<span class='keyword'>{kw}</span>" for kw in keywords) + "</div>"
+
