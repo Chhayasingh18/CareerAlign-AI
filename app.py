@@ -5,6 +5,7 @@ from fpdf import FPDF
 import requests
 from collections import Counter
 import re
+import os
 
 SKILLS_DB = [
     # Core Programming & AI Skills
@@ -94,7 +95,7 @@ RESOURCES = {
     "MongoDB": "https://www.mongodb.com/docs/",
     "DBMS": "https://www.geeksforgeeks.org/dbms/",
     "SQL Joins": "https://www.w3schools.com/sql/sql_join.asp",
-    "Subqueries": "https://www.w3schools.com/sql/sql subqueries.asp",
+    "Subqueries": "https://www.w3schools.com/sql/sql_subqueries.asp",
     "Database Normalization": "https://www.geeksforgeeks.org/database-normalization-normal-forms/",
     "Database Indexing": "https://dev.mysql.com/doc/refman/8.4/en/mysql-indexes.html",
     "JSON": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
@@ -200,7 +201,7 @@ def extract_text(file):
     text = ""
     if not file:
         return ""
-    filepath = file.name
+    filepath = file if isinstance(file, str) else file.name
     if filepath.endswith('.pdf'):
         reader = PdfReader(filepath)
         for page in reader.pages:
@@ -262,18 +263,23 @@ def generate_pdf(your_skills, matching_skills, missing_skills, learning_resource
     return path
 
 def summarize_job_description(job_desc):
-    if not job_desc.strip():
-        return job_desc
-    API_URL = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
-    headers = {"Authorization": "Bearer -copy your hugging face key here-"}
+    """Optional BART summarisation; requires HF_API_KEY in the host environment."""
+    if not job_desc or not job_desc.strip():
+        return ""
+    api_key = os.environ.get("HF_API_KEY")
+    if not api_key:
+        return "Summarisation is not configured. Add an HF_API_KEY environment variable to enable it."
+    api_url = "https://api-inference.huggingface.co/models/facebook/bart-large-cnn"
+    headers = {"Authorization": f"Bearer {api_key}"}
     try:
-        response = requests.post(API_URL, headers=headers, json={"inputs": job_desc})
-        if response.status_code == 200:
-            return response.json()[0]['summary_text']
-        return job_desc
-    except:
-        return job_desc
-
+        response = requests.post(api_url, headers=headers, json={"inputs": job_desc}, timeout=45)
+        response.raise_for_status()
+        payload = response.json()
+        if isinstance(payload, list) and payload and "summary_text" in payload[0]:
+            return payload[0]["summary_text"]
+        return "The summarisation service did not return a summary. Please try again later."
+    except requests.RequestException as exc:
+        return f"Summarisation is temporarily unavailable: {exc.__class__.__name__}."
 def calculate_match_score(matching_skills, missing_skills):
     total_relevant = len(matching_skills) + len(missing_skills)
     if total_relevant == 0:
@@ -343,3 +349,55 @@ def format_keywords(keywords):
         return "<p>No keywords extracted.</p>"
     return "<div class='keywords'>" + " ".join(f"<span class='keyword'>{kw}</span>" for kw in keywords) + "</div>"
 
+# Gradio web interface
+with gr.Blocks(title="CareerAlign AI") as demo:
+    gr.Markdown(
+        "# CareerAlign AI\n"
+        "Compare a PDF or DOCX resume with a job description. "
+        "The current matching engine checks for terms in a predefined skills catalogue."
+    )
+    with gr.Row():
+        resume_input = gr.File(
+            label="Upload resume (PDF or DOCX)",
+            file_types=[".pdf", ".docx"],
+            type="filepath"
+        )
+        job_input = gr.Textbox(
+            label="Paste job description",
+            placeholder="Paste the job description here...",
+            lines=12
+        )
+    analyze_button = gr.Button("Analyse resume", variant="primary")
+    score_output = gr.Number(label="Keyword match score (%)")
+    with gr.Row():
+        detected_output = gr.JSON(label="Skills found in resume")
+        matched_output = gr.JSON(label="Skills matching the job")
+    with gr.Row():
+        missing_output = gr.JSON(label="Skills mentioned in job but not found")
+        careers_output = gr.JSON(label="Rule-based career suggestions")
+    resources_output = gr.JSON(label="Suggested learning resources")
+    keywords_output = gr.JSON(label="Frequent job-description keywords")
+    report_output = gr.File(label="Download PDF analysis report")
+    analyze_button.click(
+        fn=analyze_resume,
+        inputs=[resume_input, job_input],
+        outputs=[
+            detected_output, matched_output, missing_output, resources_output,
+            careers_output, report_output, score_output, keywords_output,
+        ],
+    )
+    gr.Markdown("---")
+    gr.Markdown("### Optional job-description summary")
+    gr.Markdown("This feature requires an HF_API_KEY secret. Resume matching does not require an API key.")
+    summary_input = gr.Textbox(label="Job description to summarise", lines=5)
+    summary_button = gr.Button("Summarise")
+    summary_output = gr.Textbox(label="Summary", lines=5)
+    summary_button.click(fn=summarize_job_description, inputs=summary_input, outputs=summary_output)
+
+if __name__ == "__main__":
+    demo.launch(
+        server_name="0.0.0.0",
+        server_port=int(os.environ.get("PORT", "7860")),
+        share=False,
+        show_error=True,
+    )
