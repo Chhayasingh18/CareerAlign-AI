@@ -1,6 +1,10 @@
 # CareerAlign AI
 
-**Live demo:** https://huggingface.co/spaces/Chhaya3008/careeralign-ai
+## Live Demo
+
+🚀 **[Try CareerAlign AI](https://huggingface.co/spaces/Chhaya3008/careeralign-ai)** — Open the publicly deployed application on Hugging Face Spaces.
+
+**Source code:** [GitHub repository](https://github.com/Chhayasingh18/CareerAlign-AI)
 
 CareerAlign AI is a beginner-friendly Python web application that compares a resume with a job description and highlights relevant skills and possible skill gaps.
 
