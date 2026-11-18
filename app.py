@@ -276,7 +276,7 @@ def suggest_roles(skill):
     return roles_map.get(skill, [])
 
 def generate_pdf(your_skills, matching_skills, missing_skills, learning_resources, career_suggestions, match_score):
-    """Create a PDF report while safely wrapping long resource URLs."""
+    """Create a compact PDF report without long URLs that can break line layout."""
     pdf = FPDF()
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
@@ -284,16 +284,17 @@ def generate_pdf(your_skills, matching_skills, missing_skills, learning_resource
     def safe_text(value):
         return str(value).encode("latin-1", "replace").decode("latin-1")
 
-    def write_section(title, content_list):
+    def write_section(title, items):
         pdf.set_font("Arial", "B", 12)
         pdf.multi_cell(0, 8, safe_text(title))
         pdf.set_font("Arial", size=10)
-        if content_list:
-            for item in content_list:
-                for line in wrap(safe_text(item), width=85, break_long_words=True, break_on_hyphens=True):
-                    pdf.multi_cell(0, 7, "- " + line)
-        else:
+        if not items:
             pdf.multi_cell(0, 7, "None")
+        else:
+            for item in items:
+                # Keep each entry short and let FPDF wrap at word boundaries.
+                text = safe_text(item)
+                pdf.multi_cell(0, 7, "- " + text)
         pdf.ln(3)
 
     pdf.set_font("Arial", "B", 16)
@@ -301,21 +302,13 @@ def generate_pdf(your_skills, matching_skills, missing_skills, learning_resource
     pdf.set_font("Arial", "B", 13)
     pdf.multi_cell(0, 9, f"Keyword Match Score: {int(match_score)}%", align="C")
     pdf.ln(4)
+
     write_section("Skills detected in your resume", your_skills)
     write_section("Matching skills", matching_skills)
     write_section("Skills to improve", missing_skills)
-
-    pdf.set_font("Arial", "B", 12)
-    pdf.multi_cell(0, 8, "Learning resources")
-    pdf.set_font("Arial", size=10)
-    if learning_resources:
-        for skill, link in learning_resources.items():
-            for line in wrap(safe_text(f"{skill}: {link}"), width=85, break_long_words=True, break_on_hyphens=True):
-                pdf.multi_cell(0, 7, line)
-    else:
-        pdf.multi_cell(0, 7, "None")
-    pdf.ln(3)
+    write_section("Learning resources", [f"{skill} - Open the learning resource in CareerAlign AI" for skill in learning_resources])
     write_section("Suggested career paths", career_suggestions)
+
     path = "resume_job_match_report.pdf"
     pdf.output(path)
     return path
