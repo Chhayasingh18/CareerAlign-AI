@@ -6,6 +6,8 @@ import requests
 from collections import Counter
 import re
 import os
+import sqlite3
+from datetime import datetime
 
 SKILLS_DB = [
     # Core Programming & AI Skills
@@ -141,7 +143,7 @@ RESOURCES = {
     "DML": "https://dev.mysql.com/doc/refman/8.4/en/sql-data-manipulation-statements.html",
     "TCL": "https://dev.mysql.com/doc/refman/8.4/en/sql-transactional-statements.html",
     "ER Diagrams": "https://www.geeksforgeeks.org/dbms/introduction-of-er-model/",
-    "Database Normalisation": "https://www.geeksforgeeks.org/dbms/database-normalization/"
+    "Database Normalisation": "https://www.geeksforgeeks.org/dbms/database-normalization/",
     "JSON": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
     "React.js": "https://react.dev/learn",
     "HTML5": "https://developer.mozilla.org/en-US/docs/Web/HTML",
@@ -362,6 +364,38 @@ def contains_skill(text, skill):
     return re.search(pattern, text.lower()) is not None
 
 
+
+
+def init_db():
+    """Create a small SQLite database for recent resume analyses."""
+    with sqlite3.connect("careeralign.db") as conn:
+        conn.execute("""CREATE TABLE IF NOT EXISTS analysis_history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            created_at TEXT NOT NULL,
+            match_score INTEGER NOT NULL,
+            matched_skills TEXT,
+            missing_skills TEXT,
+            job_keywords TEXT
+        )""")
+
+
+def save_analysis(match_score, matching_skills, missing_skills, job_keywords):
+    with sqlite3.connect("careeralign.db") as conn:
+        conn.execute(
+            "INSERT INTO analysis_history (created_at, match_score, matched_skills, missing_skills, job_keywords) VALUES (?, ?, ?, ?, ?)",
+            (datetime.now().strftime("%Y-%m-%d %H:%M"), match_score,
+             ", ".join(matching_skills), ", ".join(missing_skills), ", ".join(job_keywords))
+        )
+
+
+def load_history():
+    init_db()
+    with sqlite3.connect("careeralign.db") as conn:
+        rows = conn.execute(
+            "SELECT created_at, match_score, matched_skills, missing_skills FROM analysis_history ORDER BY id DESC LIMIT 20"
+        ).fetchall()
+    return rows or [("No analyses yet", "", "Upload a resume and analyse a job description", "")]
+
 def analyze_resume(resume_file, job_desc):
     if not resume_file or not job_desc.strip():
         return [], [], [], {}, [], None, 0, []
@@ -400,54 +434,49 @@ def format_keywords(keywords):
     return "<div class='keywords'>" + " ".join(f"<span class='keyword'>{kw}</span>" for kw in keywords) + "</div>"
 
 # Gradio web interface
-with gr.Blocks(title="CareerAlign AI") as demo:
-    gr.Markdown(
-        "# CareerAlign AI\n"
-        "Compare a PDF or DOCX resume with a job description. "
-        "The current matching engine checks for terms in a predefined skills catalogue."
-    )
+CUSTOM_CSS = """
+.gradio-container {max-width: 1120px !important; margin: auto !important;}
+#hero {padding: 28px; border-radius: 18px; background: linear-gradient(120deg,#172554,#4338ca); color: white; margin-bottom: 18px;}
+#hero h1 {font-size: 2.1rem; margin-bottom: 6px; color: white;}
+#hero p {color: #e0e7ff; margin: 0;}
+.panel {border: 1px solid var(--border-color-primary); border-radius: 14px; padding: 14px;}
+footer {display:none !important;}
+"""
+
+init_db()
+with gr.Blocks(title="CareerAlign AI | Resume Analyzer", theme=gr.themes.Soft(primary_hue="indigo", neutral_hue="slate"), css=CUSTOM_CSS) as demo:
+    gr.HTML("""<div id='hero'><h1>CareerAlign AI</h1><p>A simple resume and job description analyzer · Find skill gaps and plan your next step</p></div>""")
     with gr.Row():
-        resume_input = gr.File(
-            label="Upload resume (PDF or DOCX)",
-            file_types=[".pdf", ".docx"],
-            type="filepath"
-        )
-        job_input = gr.Textbox(
-            label="Paste job description",
-            placeholder="Paste the job description here...",
-            lines=12
-        )
-    analyze_button = gr.Button("Analyse resume", variant="primary")
-    score_output = gr.Number(label="Keyword match score (%)")
-    with gr.Row():
-        detected_output = gr.JSON(label="Skills found in resume")
-        matched_output = gr.JSON(label="Skills matching the job")
-    with gr.Row():
-        missing_output = gr.JSON(label="Skills mentioned in job but not found")
-        careers_output = gr.JSON(label="Rule-based career suggestions")
-    resources_output = gr.JSON(label="Suggested learning resources")
-    keywords_output = gr.JSON(label="Frequent job-description keywords")
-    report_output = gr.File(label="Download PDF analysis report")
-    analyze_button.click(
-        fn=analyze_resume,
-        inputs=[resume_input, job_input],
-        outputs=[
-            detected_output, matched_output, missing_output, resources_output,
-            careers_output, report_output, score_output, keywords_output,
-        ],
-    )
+        with gr.Column(scale=1):
+            gr.Markdown("### 01 · Add your details")
+            resume_input = gr.File(label="Upload your resume", file_types=[".pdf", ".docx"], type="filepath")
+            job_input = gr.Textbox(label="Job description", placeholder="Paste the job description here...", lines=12)
+            analyze_button = gr.Button("Analyse my resume", variant="primary", size="lg")
+            gr.Markdown("*Supports PDF and DOCX files. Your score is an indicative keyword match, not a hiring prediction.*")
+        with gr.Column(scale=1):
+            gr.Markdown("### 02 · Your analysis")
+            score_output = gr.Number(label="Keyword match score (%)", precision=0)
+            with gr.Row():
+                detected_output = gr.JSON(label="Skills in your resume")
+                matched_output = gr.JSON(label="Matching skills")
+            with gr.Row():
+                missing_output = gr.JSON(label="Skills to improve")
+                careers_output = gr.JSON(label="Suggested career paths")
+            resources_output = gr.JSON(label="Learning resources")
+            keywords_output = gr.JSON(label="Job description keywords")
+            report_output = gr.File(label="Download your PDF report")
+    analyze_button.click(fn=analyze_resume, inputs=[resume_input, job_input], outputs=[detected_output, matched_output, missing_output, resources_output, careers_output, report_output, score_output, keywords_output])
     gr.Markdown("---")
-    gr.Markdown("### Optional job-description summary")
-    gr.Markdown("This feature requires an HF_API_KEY secret. Resume matching does not require an API key.")
-    summary_input = gr.Textbox(label="Job description to summarise", lines=5)
-    summary_button = gr.Button("Summarise")
-    summary_output = gr.Textbox(label="Summary", lines=5)
-    summary_button.click(fn=summarize_job_description, inputs=summary_input, outputs=summary_output)
+    with gr.Accordion("Recent analysis history", open=False):
+        history_output = gr.Dataframe(headers=["Date", "Match %", "Matched skills", "Missing skills"], value=load_history, interactive=False, wrap=True)
+        refresh_button = gr.Button("Refresh history")
+        refresh_button.click(fn=load_history, outputs=history_output)
+    with gr.Accordion("Optional: summarise a job description", open=False):
+        gr.Markdown("Requires an HF_API_KEY secret. Resume analysis works without an API key.")
+        summary_input = gr.Textbox(label="Job description", lines=5)
+        summary_button = gr.Button("Summarise")
+        summary_output = gr.Textbox(label="Summary", lines=5)
+        summary_button.click(fn=summarize_job_description, inputs=summary_input, outputs=summary_output)
 
 if __name__ == "__main__":
-    demo.launch(
-        server_name="0.0.0.0",
-        server_port=int(os.environ.get("PORT", "7860")),
-        share=False,
-        show_error=True,
-    )
+    demo.launch(server_name="0.0.0.0", server_port=int(os.environ.get("PORT", "7860")), share=False, show_error=True)
