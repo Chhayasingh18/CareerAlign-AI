@@ -46,7 +46,14 @@ SKILLS_DB = [
     "Spring Web", "Spring Data JPA", "Hibernate", "Maven", "Gradle", "REST APIs",
     "MySQL", "PostgreSQL", "Oracle Database", "MongoDB", "DBMS", "SQL Joins",
     "Subqueries", "Database Normalization", "Database Indexing", "JSON",
-    "React.js", "HTML5", "CSS3", "JavaScript ES6", "Postman", "JUnit", "Mockito"\r
+    "React.js", "HTML5", "CSS3", "JavaScript ES6", "Postman", "JUnit", "Mockito",
+    "JDK", "JRE", "JVM", "Inheritance", "Polymorphism", "Encapsulation", "Abstraction",
+    "Interfaces", "ArrayList", "HashMap", "String Handling", "Array Manipulation",
+    "Recursion", "Searching", "Sorting", "Time Complexity", "Space Complexity",
+    "LinkedList", "Stacks", "Queues", "Spring Security",
+    "SQL Constraints", "Primary Keys", "Foreign Keys", "ACID Properties", "Transactions",
+    "Stored Procedures", "Views", "Indexes", "Aggregate Functions", "GROUP BY", "ORDER BY",
+    "DDL", "DML", "TCL", "ER Diagrams", "Database Normalisation"\r
 ]
 
 
@@ -98,6 +105,43 @@ RESOURCES = {
     "Subqueries": "https://www.w3schools.com/sql/sql_subqueries.asp",
     "Database Normalization": "https://www.geeksforgeeks.org/database-normalization-normal-forms/",
     "Database Indexing": "https://dev.mysql.com/doc/refman/8.4/en/mysql-indexes.html",
+    "JDK": "https://dev.java/learn/",
+    "JRE": "https://dev.java/learn/",
+    "JVM": "https://dev.java/learn/",
+    "Inheritance": "https://dev.java/learn/classes-objects/",
+    "Polymorphism": "https://dev.java/learn/classes-objects/",
+    "Encapsulation": "https://dev.java/learn/classes-objects/",
+    "Abstraction": "https://dev.java/learn/classes-objects/",
+    "Interfaces": "https://dev.java/learn/",
+    "ArrayList": "https://dev.java/learn/api/collections-framework/",
+    "HashMap": "https://dev.java/learn/api/collections-framework/",
+    "String Handling": "https://dev.java/learn/",
+    "Array Manipulation": "https://www.geeksforgeeks.org/array-data-structure/",
+    "Recursion": "https://www.geeksforgeeks.org/recursion/",
+    "Searching": "https://www.geeksforgeeks.org/searching-algorithms/",
+    "Sorting": "https://www.geeksforgeeks.org/sorting-algorithms/",
+    "Time Complexity": "https://www.geeksforgeeks.org/analysis-of-algorithms-set-1-asymptotic-analysis/",
+    "Space Complexity": "https://www.geeksforgeeks.org/g-fact-86/",
+    "LinkedList": "https://dev.java/learn/api/collections-framework/",
+    "Stacks": "https://www.geeksforgeeks.org/stack-data-structure/",
+    "Queues": "https://www.geeksforgeeks.org/queue-data-structure/",
+    "Spring Security": "https://docs.spring.io/spring-security/reference/",
+    "SQL Constraints": "https://dev.mysql.com/doc/refman/8.4/en/constraint.html",
+    "Primary Keys": "https://dev.mysql.com/doc/refman/8.4/en/constraint-primary-key.html",
+    "Foreign Keys": "https://dev.mysql.com/doc/refman/8.4/en/create-table-foreign-keys.html",
+    "ACID Properties": "https://dev.mysql.com/doc/refman/8.4/en/mysql-acid.html",
+    "Transactions": "https://dev.mysql.com/doc/refman/8.4/en/commit.html",
+    "Stored Procedures": "https://dev.mysql.com/doc/refman/8.4/en/create-procedure.html",
+    "Views": "https://dev.mysql.com/doc/refman/8.4/en/views.html",
+    "Indexes": "https://dev.mysql.com/doc/refman/8.4/en/mysql-indexes.html",
+    "Aggregate Functions": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "GROUP BY": "https://dev.mysql.com/doc/refman/8.4/en/group-by-handling.html",
+    "ORDER BY": "https://dev.mysql.com/doc/refman/8.4/en/order-by-optimization.html",
+    "DDL": "https://dev.mysql.com/doc/refman/8.4/en/sql-data-definition-statements.html",
+    "DML": "https://dev.mysql.com/doc/refman/8.4/en/sql-data-manipulation-statements.html",
+    "TCL": "https://dev.mysql.com/doc/refman/8.4/en/sql-transactional-statements.html",
+    "ER Diagrams": "https://www.geeksforgeeks.org/dbms/introduction-of-er-model/",
+    "Database Normalisation": "https://www.geeksforgeeks.org/dbms/database-normalization/"
     "JSON": "https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/JSON",
     "React.js": "https://react.dev/learn",
     "HTML5": "https://developer.mozilla.org/en-US/docs/Web/HTML",
@@ -311,6 +355,12 @@ Looking forward to the opportunity to discuss how my skills align with your need
 Best regards,
 [Your Name]
 """
+
+def contains_skill(text, skill):
+    """Match a skill as a phrase/term, avoiding common substring false positives."""
+    pattern = r"(?<![a-z0-9])" + re.escape(skill.lower()) + r"(?![a-z0-9])"
+    return re.search(pattern, text.lower()) is not None
+
 
 def analyze_resume(resume_file, job_desc):
     if not resume_file or not job_desc.strip():
