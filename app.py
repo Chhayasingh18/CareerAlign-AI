@@ -9,6 +9,7 @@ import re
 import os
 import sqlite3
 from datetime import datetime
+from textwrap import wrap
 
 SKILLS_DB = [
     # Core Programming & AI Skills
@@ -275,36 +276,46 @@ def suggest_roles(skill):
     return roles_map.get(skill, [])
 
 def generate_pdf(your_skills, matching_skills, missing_skills, learning_resources, career_suggestions, match_score):
+    """Create a PDF report while safely wrapping long resource URLs."""
     pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
-    pdf.set_font("Arial", 'B', 14)
-    pdf.cell(0, 10, "AI Resume & Job Match Report", 0, 1, 'C')
-    pdf.set_font("Arial", 'B', 16)
-    pdf.cell(0, 10, f"Match Score: {match_score}%", 0, 1, 'C')
-    pdf.ln(5)
+
+    def safe_text(value):
+        return str(value).encode("latin-1", "replace").decode("latin-1")
+
     def write_section(title, content_list):
-        pdf.set_font("Arial", 'B', 12)
-        pdf.cell(0, 10, title, ln=1)
-        pdf.set_font("Arial", size=11)
+        pdf.set_font("Arial", "B", 12)
+        pdf.multi_cell(0, 8, safe_text(title))
+        pdf.set_font("Arial", size=10)
         if content_list:
             for item in content_list:
-                pdf.multi_cell(0, 8, "- " + str(item))
+                for line in wrap(safe_text(item), width=85, break_long_words=True, break_on_hyphens=True):
+                    pdf.multi_cell(0, 7, "- " + line)
         else:
-            pdf.cell(0, 8, "None", ln=1)
-        pdf.ln(5)
-    write_section("Your Skills:", your_skills)
-    write_section("Matching Skills:", matching_skills)
-    write_section("Missing Skills:", missing_skills)
-    pdf.set_font("Arial", 'B', 12)
-    pdf.cell(0, 10, "Learning Resources:", ln=1)
-    pdf.set_font("Arial", size=11)
+            pdf.multi_cell(0, 7, "None")
+        pdf.ln(3)
+
+    pdf.set_font("Arial", "B", 16)
+    pdf.multi_cell(0, 10, "CareerAlign Resume and Job Match Report", align="C")
+    pdf.set_font("Arial", "B", 13)
+    pdf.multi_cell(0, 9, f"Keyword Match Score: {int(match_score)}%", align="C")
+    pdf.ln(4)
+    write_section("Skills detected in your resume", your_skills)
+    write_section("Matching skills", matching_skills)
+    write_section("Skills to improve", missing_skills)
+
+    pdf.set_font("Arial", "B", 12)
+    pdf.multi_cell(0, 8, "Learning resources")
+    pdf.set_font("Arial", size=10)
     if learning_resources:
         for skill, link in learning_resources.items():
-            pdf.multi_cell(0, 8, f"{skill}: {link}")
+            for line in wrap(safe_text(f"{skill}: {link}"), width=85, break_long_words=True, break_on_hyphens=True):
+                pdf.multi_cell(0, 7, line)
     else:
-        pdf.cell(0, 8, "None", ln=1)
-    pdf.ln(5)
-    write_section("Career Suggestions:", career_suggestions)
+        pdf.multi_cell(0, 7, "None")
+    pdf.ln(3)
+    write_section("Suggested career paths", career_suggestions)
     path = "resume_job_match_report.pdf"
     pdf.output(path)
     return path
@@ -409,6 +420,7 @@ def analyze_resume(resume_file, job_desc):
     career_suggestions = sorted(set(role for skill in your_skills for role in suggest_roles(skill)))
     match_score = calculate_match_score(matching_skills, missing_skills)
     job_keywords = extract_keywords(job_text)
+    save_analysis(match_score, matching_skills, missing_skills, job_keywords)
     pdf_path = generate_pdf(your_skills, matching_skills, missing_skills, learning_resources, career_suggestions, match_score)
     return (your_skills, matching_skills, missing_skills, learning_resources, 
             career_suggestions, pdf_path, match_score, job_keywords)
