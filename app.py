@@ -290,6 +290,7 @@ def generate_pdf(your_skills, matching_skills, missing_skills, learning_resource
         cleaned = safe_text(text)
         # Pre-wrap every line, including long unbroken words, before passing it to FPDF.
         for part in wrap(cleaned, width=62, break_long_words=True, break_on_hyphens=True) or [""]:
+            pdf.set_x(12)
             pdf.multi_cell(180, 7, part)
 
     def write_section(title, items):
