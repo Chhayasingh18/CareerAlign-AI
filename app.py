@@ -1,3 +1,4 @@
+import spaces
 import gradio as gr
 from PyPDF2 import PdfReader
 from docx import Document
@@ -55,7 +56,7 @@ SKILLS_DB = [
     "LinkedList", "Stacks", "Queues", "Spring Security",
     "SQL Constraints", "Primary Keys", "Foreign Keys", "ACID Properties", "Transactions",
     "Stored Procedures", "Views", "Indexes", "Aggregate Functions", "GROUP BY", "ORDER BY",
-    "DDL", "DML", "TCL", "ER Diagrams", "Database Normalisation"\r
+    "DDL", "DML", "TCL", "ER Diagrams", "Database Normalisation"
 ]
 
 
@@ -444,8 +445,16 @@ footer {display:none !important;}
 """
 
 init_db()
+@spaces.GPU(duration=60)
+def _zerogpu_compatibility_check():
+    """No-op handler required by free ZeroGPU Spaces; the app itself uses CPU."""
+    return None
+
+
 with gr.Blocks(title="CareerAlign AI | Resume Analyzer", theme=gr.themes.Soft(primary_hue="indigo", neutral_hue="slate"), css=CUSTOM_CSS) as demo:
     gr.HTML("""<div id='hero'><h1>CareerAlign AI</h1><p>A simple resume and job description analyzer · Find skill gaps and plan your next step</p></div>""")
+    zerogpu_check_button = gr.Button(visible=False)
+    zerogpu_check_button.click(fn=_zerogpu_compatibility_check, inputs=[], outputs=[])
     with gr.Row():
         with gr.Column(scale=1):
             gr.Markdown("### 01 · Add your details")
