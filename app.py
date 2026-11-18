@@ -55,7 +55,7 @@ SKILLS_DB = [
     "LinkedList", "Stacks", "Queues", "Spring Security",
     "SQL Constraints", "Primary Keys", "Foreign Keys", "ACID Properties", "Transactions",
     "Stored Procedures", "Views", "Indexes", "Aggregate Functions", "GROUP BY", "ORDER BY",
-    "DDL", "DML", "TCL", "ER Diagrams", "Database Normalisation"\r
+    "DDL", "DML", "TCL", "ER Diagrams", "Database Normalisation"
 ]
 
 
