@@ -276,37 +276,38 @@ def suggest_roles(skill):
     return roles_map.get(skill, [])
 
 def generate_pdf(your_skills, matching_skills, missing_skills, learning_resources, career_suggestions, match_score):
-    """Create a compact PDF report without long URLs that can break line layout."""
+    """Generate a compact PDF using fixed-width, pre-wrapped lines."""
     pdf = FPDF()
+    pdf.set_margins(12, 12, 12)
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
 
     def safe_text(value):
         return str(value).encode("latin-1", "replace").decode("latin-1")
 
+    def write_line(text, font_size=10, bold=False):
+        pdf.set_font("Arial", "B" if bold else "", font_size)
+        cleaned = safe_text(text)
+        # Pre-wrap every line, including long unbroken words, before passing it to FPDF.
+        for part in wrap(cleaned, width=62, break_long_words=True, break_on_hyphens=True) or [""]:
+            pdf.multi_cell(180, 7, part)
+
     def write_section(title, items):
-        pdf.set_font("Arial", "B", 12)
-        pdf.multi_cell(0, 8, safe_text(title))
-        pdf.set_font("Arial", size=10)
-        if not items:
-            pdf.multi_cell(0, 7, "None")
-        else:
+        write_line(title, 12, True)
+        if items:
             for item in items:
-                # Keep each entry short and let FPDF wrap at word boundaries.
-                text = safe_text(item)
-                pdf.multi_cell(0, 7, "- " + text)
+                write_line("- " + str(item), 10, False)
+        else:
+            write_line("None")
         pdf.ln(3)
 
-    pdf.set_font("Arial", "B", 16)
-    pdf.multi_cell(0, 10, "CareerAlign Resume and Job Match Report", align="C")
-    pdf.set_font("Arial", "B", 13)
-    pdf.multi_cell(0, 9, f"Keyword Match Score: {int(match_score)}%", align="C")
+    write_line("CareerAlign Resume and Job Match Report", 16, True)
+    write_line(f"Keyword Match Score: {int(match_score)}%", 13, True)
     pdf.ln(4)
-
     write_section("Skills detected in your resume", your_skills)
     write_section("Matching skills", matching_skills)
     write_section("Skills to improve", missing_skills)
-    write_section("Learning resources", [f"{skill} - Open the learning resource in CareerAlign AI" for skill in learning_resources])
+    write_section("Learning resources", [str(skill) + " - See the app for the learning link" for skill in learning_resources])
     write_section("Suggested career paths", career_suggestions)
 
     path = "resume_job_match_report.pdf"
